@@ -5,6 +5,7 @@ const { body, validationResult } = require("express-validator"); // Importing ex
 const bcrypt = require("bcryptjs"); // Importing bcrypt for password hashing
 const jwt = require("jsonwebtoken"); // Importing jsonwebtoken for token generation
 require("dotenv").config({ path: ".env.local" }); // Loading environment variables from .env.local file
+const fetchUser = require("../middleware/fetchUser");
 
 // Route to handle user registration /api/auth/signup
 router.post(
@@ -55,7 +56,7 @@ router.post(
   }
 );
 
-// Route to handle user registration /api/auth/login
+// Route to handle user login /api/auth/login
 router.post(
   "/login",
   [
@@ -98,4 +99,15 @@ router.post(
   }
 );
 
+// Route to fetch user data /api/auth/fetchuser
+router.get("/fetchuser", fetchUser, async (req, res) => {
+  try {
+    const userid = req.user.id;
+    const user = await User.findById(userid).select("-password");
+    res.send(user);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error!");
+  }
+});
 module.exports = router; // Export router for use in other files
