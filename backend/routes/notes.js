@@ -86,4 +86,27 @@ router.put(
     }
   }
 );
+
+//delete note, DELETE /api/notes/delete
+router.delete(
+  "/delete/:id",
+  fetchUser,
+
+  async (req, res) => {
+    try {
+      let note = await Note.findById(req.params.id);
+      if (!note) {
+        return res.status(404).send("Note Not Found!");
+      }
+      if (req.user.id !== note.user.toString()) {
+        return res.status(401).send("UnAuthorized Access!");
+      }
+      note = await Note.findByIdAndDelete(req.params.id);
+      res.send("note deleted");
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Internal Server Error!");
+    }
+  }
+);
 module.exports = router;
