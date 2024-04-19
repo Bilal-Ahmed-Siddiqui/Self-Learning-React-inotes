@@ -15,5 +15,34 @@ router.get("/fetchall", fetchUser, async (req, res) => {
   }
 });
 
-
+//create note Post, /api/notes/create
+router.post(
+  "/create",
+  fetchUser,
+  [
+    body("title", "title can not be blank").not().isEmpty(),
+    body("description", "description can not be blank").not().isEmpty(),
+    body("tag", "tag can not be blank").not().isEmpty(),
+  ],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors });
+      }
+      const { title, description, tag } = req.body;
+      const newNote = new Note({
+        user: req.user.id,
+        title,
+        description,
+        tag,
+      });
+      newNote.save();
+      res.send(newNote);
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Internal Server Error!");
+    }
+  }
+);
 module.exports = router;
