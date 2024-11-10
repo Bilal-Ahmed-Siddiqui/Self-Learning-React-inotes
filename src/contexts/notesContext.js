@@ -27,7 +27,7 @@ export const NotesState = (props) => {
   const [notes, setnotes] = useState(initialState);
   return (
     <notesContext.Provider value={{ notes, setnotes }}>
-      props.childern
+      {props.children}
     </notesContext.Provider>
   );
 };

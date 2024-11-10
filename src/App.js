@@ -3,11 +3,11 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import About from "./components/About";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import notesContext, { notesState } from "./contexts/notesContext";
+import notesContext, { NotesState } from "./contexts/notesContext";
 
 function App() {
   return (
-    <notesState>
+    <NotesState>
       <Router>
         <Routes>
           <Route path="/" exact element={<Home />} />
@@ -15,7 +15,7 @@ function App() {
           <Route path="/about" exact element={<About />} />
         </Routes>
       </Router>
-    </notesState>
+    </NotesState>
   );
 }
 
